@@ -3,7 +3,7 @@
 
 
 ### サンプルアプリケーションをブラウザ内で起動する
-../lecture03/lecture03.png
+![lecture03](../lecture03/lecture03.png)
 
 ### AP サーバーについて調べてみましょう。
 Puma
