@@ -10,6 +10,6 @@
 ## EC2→RDS接続確認
 ![lecture04](../lecture04/接続確認.png)
 ## EC2セキュリティグループ
-![lecture04](../lecture04/EC2セキュリティグループ.png)
+![lecture04](../lecture04/EC2security.png)
 ## RDSセキュリティグループ
-![lecture04](../lecture04/RDSセキュリティグループ.png)
+![lecture04](../lecture04/RDSsecurity.png)
