@@ -10,7 +10,7 @@
 
 
 ### ELB経由での起動
-![lecture05](../lecture05/Banana.png)
+![lecture05](../lecture05/banana.png)
 
 
 ### AWS構成図
