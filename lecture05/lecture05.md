@@ -6,7 +6,7 @@
 
 
 ### NginxとUnicornでの起動
-![lecture05](../lecture05/Nginx&Unicorn.png)
+![lecture05](../lecture05/banana.png)
 
 
 ### ELB経由での起動
