@@ -6,11 +6,11 @@
 
 
 ### NginxとUnicornでの起動
-![lecture05](../lecture05/banana.png)
+![lecture05](../lecture05/Nginx＆Unicorn.png)
 
 
 ### ELB経由での起動
-![lecture05](../lecture05/ELB.png)
+![lecture05](../lecture05/Banana.png)
 
 
 ### AWS構成図
