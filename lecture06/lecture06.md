@@ -7,8 +7,9 @@
 #### 2段階認証の設定確認
 ![lecture06](../lecture06/cloudtrail.png)
 
-### CloudWatchでのアラーム設定
+### CloudWatchでのアラーム設定&証跡
 ![lecture06](../lecture06/cloudwatch.png)
+![lecture06](../lecture06/cloudwatchmail.png)
 
 ### 2023年6月AWS料金
  2019年より開設しているので料金は発生しています。
