@@ -1,0 +1,43 @@
+AWSTemplateFormatVersion: 2010-09-09
+# ELBの設定
+Resources:
+  myElb:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties: 
+      Type: application
+      Name: raisetech10
+      Scheme: internet-facing
+      IpAddressType: ipv4
+      Subnets: 
+        - !ImportValue publicsubnet1a
+        - !ImportValue publicsubnet1c
+      SecurityGroups: 
+        - sg-00c4345b5cb05b10e
+      Tags:
+        - Key: Name 
+          Value: raisetech10
+# ELBのターゲットグループ設定
+  myElbTargetgroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      TargetType: instance
+      Name: raisetech10
+      Protocol: HTTP
+      ProtocolVersion: HTTP1
+      VpcId: !ImportValue l10-vpc
+      HealthCheckProtocol: HTTP
+      HealthCheckPath: /
+      Port: 80
+      Targets:
+        - Id: !ImportValue l10-ec2
+          Port: 8080
+# ELBのリスナー設定
+  myElbListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties: 
+      LoadBalancerArn: !Ref myElb
+      DefaultActions: 
+        - Type: forward
+          TargetGroupArn: !Ref myElbTargetgroup
+      Port: 80
+      Protocol: HTTP
