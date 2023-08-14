@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+# RDSのサブネット登録
+  myRDSSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: raisetech10
+      DBSubnetGroupName: privatesubnet1c 
+      SubnetIds:
+        - !ImportValue privatesubnet1c
+        - !ImportValue privatesubnet1a
+      Tags:
+        - Key: Name
+          Value: raisetech10
+# RDSの作成
+  myRDSInstance:
+    Type: AWS::RDS::DBInstance
+    Properties: 
+      AvailabilityZone: ap-northeast-1c
+      Engine: mysql
+      EngineVersion: 8.0.33
+      MultiAZ: false
+      DBName: raisetech10
+      MasterUsername: admin
+      MasterUserPassword: '{{resolve:ssm-secure:raisetech10-rds-pw:1}}'
+      DBInstanceClass: db.t3.micro
+      StorageType: gp2
+      AllocatedStorage: 20
+      DBSubnetGroupName: !Ref myRDSSubnetGroup
+      DBInstanceIdentifier: raisetech10
+      PubliclyAccessible: "false"
+      VPCSecurityGroups: 
+        - !ImportValue secGroupName2
+      Tags:
+        - Key: Name
+          Value: raisetech10 
