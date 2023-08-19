@@ -14,9 +14,6 @@ Resources:
           SubnetId: !ImportValue publicsubnet1c
           GroupSet:
            - !ImportValue secGroupName1
-      UserData:
-        Fn::Base64:
-            sudo yum -y update
       Tags:
         - Key: Name
           Value: raisetech10
