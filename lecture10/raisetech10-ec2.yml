@@ -5,8 +5,8 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       KeyName: raisetech04 
-      ImageId: ami-0e25eba2025eea319
-      InstanceType: t2.micro
+      ImageId: ami-044dbe71ee2d3c59e
+      InstanceType: t2.small
       Monitoring: false
       NetworkInterfaces:
         - AssociatePublicIpAddress: "true"
@@ -15,12 +15,13 @@ Resources:
           GroupSet:
            - !ImportValue secGroupName1
       UserData:
-        Fn::Base64: !Sub |
-         #!/bin/bash
-         sudo yum -y update
-         sudo yum remove -y mariadb-*
-         sudo yum install -y mysql
-         sudo service mysqld start
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash
+            sudo yum -y update
+            sudo yum remove -y mariadb-*
+            sudo yum install -y mysql
+            sudo service mysqld start
       Tags:
         - Key: Name
           Value: raisetech10

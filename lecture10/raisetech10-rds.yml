@@ -16,7 +16,7 @@ Resources:
   myRDSInstance:
     Type: AWS::RDS::DBInstance
     Properties: 
-      AvailabilityZone: ap-northeast-1c
+      AvailabilityZone: !Sub ${AWS::Region}c
       Engine: mysql
       EngineVersion: 8.0.33
       MultiAZ: false
