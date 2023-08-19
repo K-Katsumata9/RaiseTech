@@ -98,9 +98,7 @@ Resources:
       GroupDescription: raisetech10
       VpcId: !Ref myVPC
       SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
+        - IpProtocol: -1
           CidrIp: 
             Fn::Sub: "${MyParameter}"
         - IpProtocol: tcp
