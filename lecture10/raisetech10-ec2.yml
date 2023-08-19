@@ -16,12 +16,7 @@ Resources:
            - !ImportValue secGroupName1
       UserData:
         Fn::Base64:
-          !Sub |
-            #!/bin/bash
             sudo yum -y update
-            sudo yum remove -y mariadb-*
-            sudo yum install -y mysql
-            sudo service mysqld start
       Tags:
         - Key: Name
           Value: raisetech10
