@@ -1,7 +1,4 @@
 ---
-- hosts: all
-  become: true
-  tasks:
     - name: remove the MariaDB
       yum:
         name: mariadb-*
