@@ -7,18 +7,6 @@ orbs:
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/configuration-reference/#jobs
 jobs:
-  say-hello:
-    # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/configuration-reference/#executor-job
-    docker:
-      - image: cimg/base:stable
-    # Add steps to the job
-    # See: https://circleci.com/docs/configuration-reference/#steps
-    steps:
-      - checkout
-      - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
   execute-cloudformation:
     executor: aws-cli/default
     steps:
@@ -82,7 +70,6 @@ jobs:
 workflows:
   RaiseTech-CircleCI:
     jobs:
-      - say-hello
       - execute-cloudformation
       - execute-ansible:
           requires:
