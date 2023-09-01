@@ -12,13 +12,10 @@ end/
   it { should be_running }
 end/
 
-/describe package('git') do
-  it { should be_installed }
-end/
-
-describe package('mysql-community-client.x86_64') do
+describe package('git') do
   it { should be_installed }
 end
+
 # 複数のパッケージがインストールされているかまとめて確認する
 /%w{mysql-community-client.x86_64 openssl.x86_64 ImageMagick.x86_64}.each do |pkg|
         describe package(pkg) do
