@@ -1,33 +1,30 @@
 ---
 - name: remove the MariaDB
-  become: yes
+  become: true
   command: sudo yum remove -y mariadb-*
 
 - name: install the mysql repo to yum
-  become: yes
+  become: true
   command: sudo yum localinstall -y https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm
 
 - name: install the mysql-community-server
-  become: yes
+  become: true
   command: sudo yum install -y --enablerepo=mysql80-community mysql-community-server
 
 - name: install the mysql-community-devel
-  become: yes
+  become: true
   command: sudo yum install --enablerepo=mysql80-community mysql-community-devel
 
 - name: make mysql logfile
-  become: yes
+  become: true
   command: sudo touch /var/log/mysqld.log
 
 - name: start mysql by default
-  become: yes
+  become: true
   command: sudo systemctl enable mysqld
   
 - name: Install git on Amazon Linux 2
-  hosts: target_node
   become: true
-  tasks:
-    - name: Install git
-      yum:
-        name: git
-        state: latest
+  yum:
+    name: git
+    state: latest
