@@ -17,11 +17,11 @@ describe package('git') do
 end
 
 # 複数のパッケージがインストールされているかまとめて確認する
-%w{mysql-community-client.x86_64 openssl.x86_64 ImageMagick.x86_64}.each do |pkg|
+/%w{mysql-community-client.x86_64 openssl.x86_64 ImageMagick.x86_64}.each do |pkg|
         describe package(pkg) do
     it { should be_installed }
   end
-end
+end/
 
 /describe port(listen_port) do
   it { should be_listening }
