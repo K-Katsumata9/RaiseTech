@@ -14,6 +14,10 @@ Resources:
           SubnetId: !ImportValue l13publicsubnet1c
           GroupSet:
            - !ImportValue l13sg1
+      UserDate: 
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo yum update -y
       Tags:
         - Key: Name
           Value: raisetech13
