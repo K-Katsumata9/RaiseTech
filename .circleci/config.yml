@@ -74,7 +74,6 @@ jobs:
             gem install rake
             gem install ed25519 -v '1.2'
             gem install bcrypt_pbkdf -v '1.0'
-            cd serverspec
             rake spec
 
 # Orchestrate jobs using workflows
