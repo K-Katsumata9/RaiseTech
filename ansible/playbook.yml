@@ -1,6 +1,6 @@
 ---
 - name: create web server
-  hosts: target_node
+  hosts: all
   roles:
     - mysql
 #- name: Install git on Amazon Linux 2

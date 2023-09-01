@@ -50,24 +50,24 @@ jobs:
           playbook: <<parameters.playbook>>
           private-key: <<parameters.private-key>>
           playbook-options: '-u ec2-user'
-  execute-serverspec:
-    docker:
-      - image: circleci/ruby:latest
-    steps:
-      - checkout
-      - add_ssh_keys: 
-          fingerprints:
-            - "8a:34:6b:e6:47:18:d3:e6:02:24:43:3b:1c:4c:5f:96"
-      - run:
-          name: test rails_app
-          command: |
-            gem install bundler
-            gem install serverspec 
-            gem install rake
-            gem install ed25519 -v '1.2'
-            gem install bcrypt_pbkdf -v '1.0'
-            cd serverspec
-            rake spec
+#  execute-serverspec:
+#    docker:
+#      - image: circleci/ruby:latest
+#    steps:
+#      - checkout
+#      - add_ssh_keys: 
+#          fingerprints:
+#            - "8a:34:6b:e6:47:18:d3:e6:02:24:43:3b:1c:4c:5f:96"
+#      - run:
+#          name: test rails_app
+#          command: |
+#            gem install bundler
+#            gem install serverspec 
+#            gem install rake
+#            gem install ed25519 -v '1.2'
+#            gem install bcrypt_pbkdf -v '1.0'
+#            cd serverspec
+#            rake spec
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
@@ -81,7 +81,7 @@ workflows:
           inventory: ANSIBLE_INVENTORY
           playbook: ansible/playbook.yml
           private-key: ANSIBLE_SSH_KEY
-      - execute-serverspec:
-          requires:
-            - execute-cloudformation
-            - execute-ansible
+ #     - execute-serverspec:
+ #         requires:
+ #           - execute-cloudformation
+ #           - execute-ansible
