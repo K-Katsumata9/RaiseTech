@@ -1,5 +1,6 @@
 ---
     - name: remove the MariaDB
+      become: true
       yum:
         name: mariadb-*
         state: absent
@@ -10,26 +11,31 @@
 #        name: 'https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm'
 #        state: present
     - name: Check if mysql-community file exists
+      become: true
       stat: 
         path: /var/tmp/yum-root-iQfPqy/mysql80-community-release-el7-3.noarch.rpm
       register: mysql_community_release
 
     - name: install the mysql rpm from a remote repo
+      become: true
       command: curl -sL https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
       when: not mysql_community_release.stat.exists 
       changed_when: false
 
     - name: install the mysql-community-server
+      become: true
       yum: 
         name: mysql-community-server
         state: latest
 
     - name: install the mysql-community-devel
+      become: true
       yum:
         name: mysql-community-devel
         state: latest
 
     - name: make mysql logfile
+      become: true
       template: 
         src: ../templates/mysqld.log.j2
         dest: /var/log/mysqld.log
@@ -38,6 +44,7 @@
         mode: '0774'
 
     - name: start mysql by default
+      become: true
       service:
         name: mysqld
         state: started
