@@ -22,3 +22,12 @@
 - name: start mysql by default
   become: yes
   command: sudo systemctl enable mysqld
+  
+- name: Install git on Amazon Linux 2
+  hosts: target_node
+  become: true
+  tasks:
+    - name: Install git
+      yum:
+        name: git
+        state: latest
