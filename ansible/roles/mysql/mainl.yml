@@ -1,0 +1,24 @@
+---
+- name: remove the MariaDB
+  become: yes
+  command: sudo yum remove -y mariadb-*
+
+- name: install the mysql repo to yum
+  become: yes
+  command: sudo yum localinstall -y https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm
+
+- name: install the mysql-community-server
+  become: yes
+  command: sudo yum install -y --enablerepo=mysql80-community mysql-community-server
+
+- name: install the mysql-community-devel
+  become: yes
+  command: sudo yum install --enablerepo=mysql80-community mysql-community-devel
+
+- name: make mysql logfile
+  become: yes
+  command: sudo touch /var/log/mysqld.log
+
+- name: start mysql by default
+  become: yes
+  command: sudo systemctl enable mysqld

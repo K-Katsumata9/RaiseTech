@@ -1,23 +1,27 @@
 ---
-- name: Install git on Amazon Linux 2
+- name: create web server
   hosts: target_node
-  become: true
-  tasks:
-    - name: Install git
-      yum:
-        name: git
-        state: latest
+  roles:
+    - mysql
+#- name: Install git on Amazon Linux 2
+#  hosts: target_node
+#  become: true
+#  tasks:
+#    - name: Install git
+#      yum:
+#        name: git
+#        state: latest
 
-    - name: Check if Nodejs Yum repo file exists
-      stat: 
-        path: /etc/yum.repos.d/nodesource-el7.repo
-      register: nodesource_repo
-    - name: Setup repo Nodejs
-      shell: curl -sL https://rpm.nodesource.com/setup_16.x | sudo bash -
-      when: not nodesource_repo.stat.exists 
-      changed_when: false
+#    - name: Check if Nodejs Yum repo file exists
+#      stat: 
+#        path: /etc/yum.repos.d/nodesource-el7.repo
+#      register: nodesource_repo
+#    - name: Setup repo Nodejs
+#      shell: curl -sL https://rpm.nodesource.com/setup_16.x | sudo bash -
+#      when: not nodesource_repo.stat.exists 
+#      changed_when: false
 
-    - name: Install nodejs
-      yum:
-        name: nodejs
-        state: latest
+#    - name: Install nodejs
+#      yum:
+#        name: nodejs
+#        state: latest
