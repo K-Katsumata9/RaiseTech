@@ -52,7 +52,7 @@ jobs:
           playbook-options: '-u ec2-user'
   execute-serverspec:
     docker:
-      - image: circleci/ruby:3.1.2-node
+      - image: circleci/ruby:latest
     steps:
       - checkout
       - run:
