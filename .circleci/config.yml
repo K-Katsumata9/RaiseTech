@@ -52,7 +52,7 @@ jobs:
           inventory: <<parameters.inventory>>
           playbook: <<parameters.playbook>>
           private-key: <<parameters.private-key>>
-          commane: echo "$ANSIBLE_VAULT" > vault-password.txt
+          command: echo "$ANSIBLE_VAULT" > vault-password.txt
           playbook-options: '-u ec2-user --vault-password-file=vault-password.txt'
 #  execute-serverspec:
 #    docker:
