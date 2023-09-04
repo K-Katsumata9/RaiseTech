@@ -43,7 +43,7 @@ jobs:
           The data must be registered in base64 format
         type: env_var_name
     environment:
-      VAULT-PASSWORD: $ANSIBLE_VAULT
+      VAULT-PASSWORD: echo VAULT-PASSWORD=$ANSIBLE_VAULT >> $BASH_ENV
     steps: 
       - checkout
       - ansible-playbook/install:
