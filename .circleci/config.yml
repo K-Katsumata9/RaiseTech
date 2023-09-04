@@ -52,10 +52,10 @@ jobs:
           name: deploy CloudFormation
           command: echo "$ANSIBLE_VAULT" > vault-password.txt
       - ansible-playbook/playbook:
-          inventory: <<parameters.inventory>>
+#          inventory: ansibe/inventory
           playbook: <<parameters.playbook>>
           private-key: <<parameters.private-key>>
-          playbook-options: '-u ec2-user --vault-password-file=vault-password.txt'
+          playbook-options: '-u ec2-user -i ansible/inventory --vault-password-file=vault-password.txt'
 #  execute-serverspec:
 #    docker:
 #      - image: circleci/ruby:latest
@@ -84,7 +84,7 @@ workflows:
       - execute-ansible:
           requires:
             - execute-cloudformation
-          inventory: ANSIBLE_INVENTORY
+#          inventory: ANSIBLE_INVENTORY
           playbook: ansible/playbook.yml
           private-key: ANSIBLE_SSH_KEY
  #     - execute-serverspec:

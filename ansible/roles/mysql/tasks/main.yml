@@ -17,7 +17,9 @@
 
     - name: install the mysql rpm from a remote repo
       become: true
-      command: curl -sL https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
+      get_url: 
+        url: https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
+        dest: /var/tmp/yum-root-iQfPqy/mysql80-community-release-el7-3.noarch.rpm
       when: not mysql_community_release.stat.exists 
       changed_when: false
 
