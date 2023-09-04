@@ -37,8 +37,8 @@ jobs:
           name: Configure Ansible Inventory
           command: |
             # Ansibleインベントリファイルを生成し、IPアドレスを追加
-            echo "[target_node]" > inventory.ini
-            echo "$INSTANCE_IP>> inventory.ini
+            echo "[target_node]" > ansible/inventory
+            echo "$INSTANCE_IP>> ansible/inventory
   execute-ansible: 
     executor: ansible-playbook/default
     parameters:
@@ -101,7 +101,7 @@ workflows:
              - execute-cloudformation
       - execute-ansible:
           requires:
-            - execute-cloudformation
+            - setup-inventory
           inventory: ANSIBLE_INVENTORY
           playbook: ansible/playbook.yml
           private-key: ANSIBLE_SSH_KEY
