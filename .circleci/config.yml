@@ -20,6 +20,25 @@ jobs:
           command: |
             aws cloudformation deploy --template-file cloudformation/raisetech13-vpc.yml --stack-name raisetech13-vpc
             aws cloudformation deploy --template-file cloudformation/raisetech13-ec2.yml --stack-name raisetech13-ec2
+            aws cloudformation deploy --template-file cloudformation/raisetech13-rds.yml --stack-name raisetech13-rds
+      - run:
+          name: Get EC2 Instance IP
+          command: |
+            INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=raisetech13" --query "Reservations[0].Instances[0].InstanceId" --output text)
+            INSTANCE_IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
+            echo "INSTANCE_IP=$INSTANCE_IP" >> $BASH_ENV
+
+  setup-inventory:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - run:
+          name: Configure Ansible Inventory
+          command: |
+            # Ansibleインベントリファイルを生成し、IPアドレスを追加
+            echo "[target_node]" > inventory.ini
+            echo "$INSTANCE_IP>> inventory.ini
   execute-ansible: 
     executor: ansible-playbook/default
     parameters:
@@ -41,6 +60,8 @@ jobs:
           so do not store any value to this environment variable.
           The data must be registered in base64 format
         type: env_var_name
+    environment:
+      VAULT-PASSWORD-FILE: $ANSIBLE_VAULT
     steps: 
       - checkout
       - ansible-playbook/install:
@@ -49,7 +70,7 @@ jobs:
           inventory: <<parameters.inventory>>
           playbook: <<parameters.playbook>>
           private-key: <<parameters.private-key>>
-          playbook-options: '-u ec2-user'
+          playbook-options: '-u ec2-user --vault-password-file VAULT-PASSWORD-FILE'
 #  execute-serverspec:
 #    docker:
 #      - image: circleci/ruby:latest
@@ -75,6 +96,9 @@ workflows:
   RaiseTech-CircleCI:
     jobs:
       - execute-cloudformation
+      - setup-inventory:
+          requires:
+             - execute-cloudformation
       - execute-ansible:
           requires:
             - execute-cloudformation

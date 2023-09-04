@@ -1,0 +1,47 @@
+---
+#  - name: bundle install
+#    command:
+#     chdir: /home/ec2-user/raisetech-live8-sample-app/
+#     cmd: bash -ls "bundle install"
+
+
+  - name: Setup Database
+    copy:
+      src: roles/rails_app_start/templates/database.yml
+      dest: /home/ec2-user/raisetech-live8-sample-app/config/database.yml
+
+  - name: Setup Procfile
+    copy:
+      src: roles/rails_app_start/templates/Procfile.dev
+      dest: /home/ec2-user/raisetech-live8-sample-app/Procfile.dev
+
+  - name: Setup unicorn.rb
+    copy:
+      src: roles/rails_app_start/templates/unicorn.rb
+      dest: /home/ec2-user/raisetech-live8-sample-app/config/unicorn.rb
+
+  - name: assets precompile
+    command: 
+      chdir: /home/ec2-user/raisetech-live8-sample-app/
+      cmd: bash -lc "rails assets:precompile"
+
+  - name: aws cli install
+    yum: 
+      name: aws-cli
+      state: latest
+      
+  - name: database create
+    command: 
+      chdir: /home/ec2-user/raisetech-live8-sample-app/
+      cmd: bash -lc "rails db:create"
+
+  - name: database migrate
+    command: 
+      chdir: /home/ec2-user/raisetech-live8-sample-app/
+      cmd: bash -lc "rails db:migrate"
+  
+  - name: Start unicorn
+    become: true
+    command: |
+      cd raisetech-live8-sample-app
+      bundle exec unicorn_rails -c /var/www/your_app_name/config/unicorn.rb -D

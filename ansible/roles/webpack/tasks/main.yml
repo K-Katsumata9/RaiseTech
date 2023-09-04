@@ -1,0 +1,28 @@
+---  
+  - name: Check if Nodejs Yum repo file exists
+    stat: 
+      path: /etc/yum.repos.d/nodesource-el7.repo
+    register: nodesource_repo
+
+  - name: Setup repo Nodejs
+    shell: curl -sL https://rpm.nodesource.com/setup_16.x | sudo bash -
+    when: not nodesource_repo.stat.exists 
+    changed_when: false
+
+  - name: Install nodejs
+    yum:
+      name: nodejs
+      state: latest
+
+  - name: Install yarn
+    become: true
+    npm: 
+      name: yarn
+      global: true
+      state: present
+
+  - name: Install ImageMagick
+    become: true
+    yum:
+      name: ImageMagick
+      state: latest
