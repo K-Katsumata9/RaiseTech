@@ -38,7 +38,7 @@ jobs:
           command: |
             # Ansibleインベントリファイルを生成し、IPアドレスを追加
             echo "[target_node]" > ansible/inventory
-            echo "$INSTANCE_IP>> ansible/inventory
+            echo "$INSTANCE_IP">> ansible/inventory
   execute-ansible: 
     executor: ansible-playbook/default
     parameters:
