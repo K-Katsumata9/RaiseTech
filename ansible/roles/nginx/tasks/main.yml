@@ -6,7 +6,7 @@
 
   - name: Install Nginx
     become: true
-    command:  sudo amazon-linux-extras install nginx1
+    command:  sudo yum install -y nginx
     when: not nginx_repo.stat.exists 
     changed_when: false
 

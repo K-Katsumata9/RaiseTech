@@ -10,6 +10,7 @@
     changed_when: false
 
   - name: Install nodejs
+    become: true
     yum:
       name: nodejs
       state: latest

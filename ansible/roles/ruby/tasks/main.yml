@@ -45,7 +45,7 @@
   ignore_errors: true
 
 - name: Install Ruby
-  shell: bash -lc "CONFIGURE_OPTS="--disable-install-rdoc" rbenv install -s 3.1.2"
+  shell: rbenv install 3.1.2
   when: rbenv_check_install.rc == 1
 
 - name: Set default Ruby version

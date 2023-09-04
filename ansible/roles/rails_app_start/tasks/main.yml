@@ -1,10 +1,9 @@
 ---
-#  - name: bundle install
-#    command:
-#     chdir: /home/ec2-user/raisetech-live8-sample-app/
-#     cmd: bash -ls "bundle install"
-
-
+  - name: bundle install
+    command: |
+        cd /home/ec2-user/raisetech-live8-sample-app
+        bundle install
+      
   - name: Setup Database
     copy:
       src: roles/rails_app_start/templates/database.yml
@@ -22,8 +21,8 @@
 
   - name: assets precompile
     command: 
-      chdir: /home/ec2-user/raisetech-live8-sample-app/
       cmd: bash -lc "rails assets:precompile"
+      chdir: /home/ec2-user/raisetech-live8-sample-app/
 
   - name: aws cli install
     yum: 
