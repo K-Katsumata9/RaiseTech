@@ -22,24 +22,6 @@ jobs:
             aws cloudformation deploy --template-file cloudformation/raisetech13-ec2.yml --stack-name raisetech13-ec2
             aws cloudformation deploy --template-file cloudformation/raisetech13-rds.yml --stack-name raisetech13-rds
   
-  get-ec2-ip:
-    docker:
-      - image: circleci/python:3.8
-    steps:
-      - checkout
-      - run:
-          name: Get EC2 IP address
-          command: |
-            curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            unzip awscliv2.zip
-            sudo ./aws/install
-            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-            aws configure set region $AWS_DEFAULT_REGION
-            
-            INSTANCE_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=raisetech13" --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
-            echo "INSTANCE_IP=$INSTANCE_IP" >> $BASH_ENV
-  
   execute-ansible: 
     executor: ansible-playbook/default
     parameters:
@@ -75,7 +57,7 @@ jobs:
 #          inventory: ansibe/inventory
           playbook: <<parameters.playbook>>
           private-key: <<parameters.private-key>>
-          playbook-options: '-u ec2-user -i "$INSTANCE_IP" --vault-password-file=vault-password.txt'
+          playbook-options: '-u ec2-user -i ansible/inventory --vault-password-file=vault-password.txt'
 
 #  execute-serverspec:
 #    docker:
@@ -102,12 +84,9 @@ workflows:
   RaiseTech-CircleCI:
     jobs:
       - execute-cloudformation
-      - get-ec2-ip:
-          requires:
-            - execute-cloudformation
       - execute-ansible:
           requires:
-            - get-ec2-ip
+            - execute-cloudformation
 #          inventory: ANSIBLE_INVENTORY
           playbook: ansible/playbook.yml
           private-key: ANSIBLE_SSH_KEY
