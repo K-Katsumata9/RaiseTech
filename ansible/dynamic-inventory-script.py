@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import boto3
+import boto
 import json
 import os
 
@@ -11,7 +11,7 @@ aws_secret_key = os.getenv('AWS_SECRET_ACCESS_KEY')
 aws_region = os.getenv('AWS_DEFAULT_REGION')
 
 # EC2クライアントの作成
-ec2 = boto3.client('ec2', region_name=aws_region, aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
+ec2 = boto.client('ec2', region_name=aws_region, aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
 
 # タグに基づいてインスタンスを検索
 response = ec2.describe_instances(Filters=[{'Name': 'tag:Name', 'Values': ['raisetech13']}])
