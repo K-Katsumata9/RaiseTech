@@ -70,8 +70,8 @@ jobs:
       - run: 
           name: Get variables
           command: |
-            echo "[target_node]" >> inventory
-            echo "$INSTANCE_IP" >> inventory
+            echo "[target_node]" >> Raisetech/ansible/inventory
+            echo "$INSTANCE_IP" >> Raisetech/ansible/inventory
             echo "$ANSIBLE_VAULT" > vault-password.txt
       - ansible-playbook/playbook:
 #          inventory: ansibe/inventory
