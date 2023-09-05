@@ -1,2 +1,4 @@
 [target_node]
-35.79.225.204
+13.113.39.255
+[target_node:vars]
+ruby_version=3.1.2

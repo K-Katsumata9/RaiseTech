@@ -1,9 +1,14 @@
 ---
-  - name: bundle install
-    command: |
-        cd /home/ec2-user/raisetech-live8-sample-app
-        bundle install
+#  - name: bundle install
+#    command: |
+#     cd /home/ec2-user/raisetech-live8-sample-app
+#     bundle install
       
+  - name: Change directory and bundle install
+    command:
+      cmd: bash -lc "bundle install"
+      chdir: /home/ec2-user/raisetech-live8-sample-app
+
   - name: Setup Database
     copy:
       src: roles/rails_app_start/templates/database.yml
@@ -39,8 +44,16 @@
       chdir: /home/ec2-user/raisetech-live8-sample-app/
       cmd: bash -lc "rails db:migrate"
   
+#  - name: Start Unicorn
+#    command: |
+#      cd ~/home/ec2-user/raisetech-live8-sample-app/
+#      bundle exec unicorn_rails -c config/unicorn.rb -D
+  
   - name: Start unicorn
+    command:
+      cmd: bash -lc "bundle exec unicorn_rails -c /home/ec2-user/raisetech-live8-sample-app/config/unicorn.rb -D"
+      chdir: /home/ec2-user/raisetech-live8-sample-app/
+
+  - name: Start Nginx 
     become: true
-    command: |
-      cd raisetech-live8-sample-app
-      bundle exec unicorn_rails -c /var/www/your_app_name/config/unicorn.rb -D
+    command: sudo systemctl start nginx
