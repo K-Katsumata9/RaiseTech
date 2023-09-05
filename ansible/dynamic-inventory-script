@@ -3,15 +3,19 @@ import os
 import json
 import boto3
 
-# AWSリージョンとプロファイルを設定
-aws_region = $AWS_DEFAULT_REGION
-# aws_profile = 'your_aws_profile_name'
-aws_access_key_id = $AWS_ACCESS_KEY_ID
-aws_secret_access_key = $AWS_SECRET_ACCESS_KEY
+# AWSリージョンを設定
+aws_region = os.environ.get('AWS_DEFAULT_REGION')
 
+# CircleCIの環境変数からAWSのアクセスキーとシークレットキーを取得
+aws_access_key = os.environ.get('AWS_ACCESS_KEY_ID')
+aws_secret_key = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
-# プロファイルを使用してBoto3セッションを作成
-session = boto3.Session(aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key, region_name=aws_region)
+# Boto3セッションを作成
+session = boto3.Session(
+    aws_access_key_id=aws_access_key,
+    aws_secret_access_key=aws_secret_key,
+    region_name=aws_region
+)
 
 # EC2クライアントを作成
 ec2 = session.client('ec2')
