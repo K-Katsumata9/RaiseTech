@@ -71,7 +71,7 @@ jobs:
           name: Get variables
           command: |
             echo "[target_node]" >> ansibe/inventory
-            echo "$INSTANCE_IP ansible_ssh_user=ec2-user" >> ansibe/inventory
+            echo "$INSTANCE_IP" >> ansibe/inventory
             echo "$ANSIBLE_VAULT" > vault-password.txt
       - ansible-playbook/playbook:
 #          inventory: ansibe/inventory
