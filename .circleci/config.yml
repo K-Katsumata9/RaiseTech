@@ -70,16 +70,12 @@ jobs:
       - run: 
           name: Get variables
           command: |
-            echo "[target_node]" >> Raisetech/ansible/inventory
-            echo $INSTANCE_IP >> Raisetech/ansible/inventory
-            echo "[target_node:vars]" >> Raisetech/ansible/inventory
-            echo "ruby_version=3.1.2" >> Raisetech/ansible/inventory
             echo $ANSIBLE_VAULT > vault-password.txt
       - ansible-playbook/playbook:
 #          inventory: ansibe/inventory
           playbook: <<parameters.playbook>>
           private-key: <<parameters.private-key>>
-          playbook-options: '-u ec2-user -i ansible/inventory --vault-password-file=vault-password.txt'
+          playbook-options: '-u ec2-user -i "$INSTANCE_IP" --vault-password-file=vault-password.txt'
 
 #  execute-serverspec:
 #    docker:
