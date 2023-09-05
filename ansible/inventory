@@ -10,6 +10,6 @@ ec2_region = $AWS_DEFAULT_REGION  # インスタンスが存在するリージ�
 # このファイルのパスを適切に設定してください
 
 # グループ名とフィルタ条件
-ansible_ssh_host = tag_Nmae_raisetech13
+ansible_ssh_host = tag_Name_raisetech13
 [ansible_ssh_host:vars]
 ruby_version=3.1.2
