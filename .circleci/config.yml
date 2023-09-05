@@ -70,10 +70,10 @@ jobs:
       - run: 
           name: Get variables
           command: |
-            echo "[target_node]" >> inventory
-            echo $INSTANCE_IP >> inventory
-            echo "[target_node:vars]" >> inventory
-            echo "ruby_version=3.1.2" >> inventory
+            echo "[target_node]" >> Raisetech/ansible/inventory
+            echo $INSTANCE_IP >> Raisetech/ansible/inventory
+            echo "[target_node:vars]" >> Raisetech/ansible/inventory
+            echo "ruby_version=3.1.2" >> Raisetech/ansible/inventory
             echo $ANSIBLE_VAULT > vault-password.txt
       - ansible-playbook/playbook:
 #          inventory: ansibe/inventory
