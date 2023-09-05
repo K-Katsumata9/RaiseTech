@@ -49,6 +49,9 @@ jobs:
       - checkout
       - ansible-playbook/install:
           version: 2.10.7
+      - run:
+          name: Configure AWS CLI
+          command: aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID && aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY && aws configure set default.region $AWS_DEFAULT_REGION
       - run: 
           name: Get variables
           command: |
@@ -57,7 +60,7 @@ jobs:
 #          inventory: ansibe/inventory
           playbook: <<parameters.playbook>>
           private-key: <<parameters.private-key>>
-          playbook-options: '-u ec2-user -i Raisetech/dynamic-inventory-script --vault-password-file=vault-password.txt'
+          playbook-options: '-u ec2-user -i ansible/dynamic-inventory-script.py --vault-password-file=vault-password.txt'
 
 #  execute-serverspec:
 #    docker:
