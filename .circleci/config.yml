@@ -19,17 +19,6 @@ jobs:
       - checkout
       - aws-cli/install
       - run:
-          name: Assume role
-          command: |
-            aws_sts_credentials=$(aws sts assume-role-with-web-identity \
-              --role-session-name "circleci-oidc" \
-              --duration-seconds 1800 \
-              --query "Credentials" \
-              --output "json")
-            echo export AWS_ACCESS_KEY_ID="$(echo $aws_sts_credentials | jq -r '.AccessKeyId')" >> $BASH_ENV
-            echo export AWS_SECRET_ACCESS_KEY="$(echo $aws_sts_credentials | jq -r '.SecretAccessKey')" >> $BASH_ENV
-            source $BASH_ENV
-      - run:
           name: deploy CloudFormation
           command: |
             set -x
