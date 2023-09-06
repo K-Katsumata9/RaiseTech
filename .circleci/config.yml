@@ -21,20 +21,20 @@ jobs:
             aws cloudformation deploy --template-file cloudformation/raisetech13-vpc.yml --stack-name raisetech13-vpc
             aws cloudformation deploy --template-file cloudformation/raisetech13-ec2.yml --stack-name raisetech13-ec2
             aws cloudformation deploy --template-file cloudformation/raisetech13-rds.yml --stack-name raisetech13-rds
-  execute-variables:
-    executor: aws-cli/default
-    steps:
-      - checkout
-      - aws-cli/setup:
-          aws-access-key-id: AWS_ACCESS_KEY_ID
-          aws-region: AWS_DEFAULT_REGION
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-      - run:
-          name: Install AWS CLI
-          command: |
-            INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=raisetech13" --query "Reservations[0].Instances[0].InstanceId" --output text)
-            IP_ADDRESS=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
-            echo "export EC2_IP_ADDRESS=$IP_ADDRESS" >> $BASH_ENV
+#  execute-variables:
+#    executor: aws-cli/default
+#    steps:
+#      - checkout
+#      - aws-cli/setup:
+#          aws-access-key-id: AWS_ACCESS_KEY_ID
+#          aws-region: AWS_DEFAULT_REGION
+#          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+#      - run:
+#          name: Install AWS CLI
+#          command: |
+#            INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=raisetech13" --query "Reservations[0].Instances[0].InstanceId" --output text)
+#            IP_ADDRESS=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
+#            echo "export EC2_IP_ADDRESS=$IP_ADDRESS" >> $BASH_ENV
 
   execute-ansible: 
     executor: ansible-playbook/default
@@ -70,8 +70,8 @@ jobs:
             aws configure set region $AWS_DEFAULT_REGION
             INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=raisetech13" --query "Reservations[0].Instances[0].InstanceId" --output text)
             IP_ADDRESS=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
-            echo "export EC2_IP_ADDRESS=$IP_ADDRESS" >> $BASH_ENV
             sed -i "1i ansible_dev_target ansible_host=${EC2_IP_ADDRESS} ansible_connection=ssh ansible_user=ec2-user" ansible/inventory
+      #echo "export EC2_IP_ADDRESS=$IP_ADDRESS" >> $BASH_ENV
       - add_ssh_keys:
           fingerprints:
             - "8a:34:6b:e6:47:18:d3:e6:02:24:43:3b:1c:4c:5f:96"
@@ -112,12 +112,13 @@ workflows:
   RaiseTech-CircleCI:
     jobs:
       - execute-cloudformation
-      - execute-variables:
-          requires:
-            - execute-cloudformation
+#      - execute-variables:
+#          requires:
+#            - execute-cloudformation
       - execute-ansible:
           requires:
-            - execute-variables
+            - execute-cloudformation
+#           - execute-variables
 #          inventory: ANSIBLE_INVENTORY
           playbook: ansible/playbook.yml
           private-key: ANSIBLE_SSH_KEY
