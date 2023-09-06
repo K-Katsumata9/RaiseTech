@@ -1,7 +1,8 @@
 ---
 - name: create web server
+  become: true
   hosts: ansible_dev_target
-  gather_facts: true
+  # gather_facts: true
   roles:
     - mysql
     - ruby
