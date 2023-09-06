@@ -43,9 +43,6 @@ jobs:
           paths:
             - bash.env
 
-
-
-
   execute-ansible: 
     executor: ansible-playbook/default
     parameters:
@@ -88,7 +85,7 @@ jobs:
 #          inventory: ansibe/inventory
           playbook: <<parameters.playbook>>
           private-key: <<parameters.private-key>>
-          playbook-options: '-u ec2-user -i ansible/inventory--vault-password-file=vault-password.txt'
+          playbook-options: '-u ec2-user -i ansible/inventory --vault-password-file=vault-password.txt'
 
 #  execute-serverspec:
 #    docker:
