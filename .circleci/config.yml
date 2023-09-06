@@ -70,7 +70,7 @@ jobs:
             aws configure set region $AWS_DEFAULT_REGION
             INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=raisetech13" --query "Reservations[0].Instances[0].InstanceId" --output text)
             IP_ADDRESS=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
-            sed -i1a "ansible_dev_target ansible_host=${IP_ADDRESS} ansible_connection=ssh ansible_user=ec2-user" ansible/inventory
+            sed -i "1a\ ansible_dev_target ansible_host=${IP_ADDRESS} ansible_connection=ssh ansible_user=ec2-user" ansible/inventory
       #echo "export EC2_IP_ADDRESS=$IP_ADDRESS" >> $BASH_ENV
       - add_ssh_keys:
           fingerprints:
