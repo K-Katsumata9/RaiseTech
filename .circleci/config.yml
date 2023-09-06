@@ -32,10 +32,15 @@ jobs:
       - run:
           name: Install AWS CLI
           command: |
-            sudo mkdir -p /workspace
             INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=raisetech13" --query "Reservations[0].Instances[0].InstanceId" --output text)
             IP_ADDRESS=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
             echo "export EC2_IP_ADDRESS=$IP_ADDRESS" >> $BASH_ENV
+      - run: |
+          cp $BASH_ENV bash.env
+      - persist_to_workspace:
+          root: .
+          paths:
+            - bash.env
 
   execute-ansible: 
     executor: ansible-playbook/default
@@ -62,10 +67,17 @@ jobs:
       VAULT-PASSWORD: echo VAULT-PASSWORD=$ANSIBLE_VAULT >> $BASH_ENV
     steps: 
       - checkout
+      - attach_workspace:
+          at: .
+      - run: |
+          cat bash.env >> $BASH_ENV
       - run:
           name: set inventory file
           command: |
             sed -i "1i ansible_dev_target ansible_host=${EC2_IP_ADDRESS} ansible_connection=ssh ansible_user=ec2-user" ansible/inventory
+      - add_ssh_keys:
+          fingerprints:
+            - "8a:34:6b:e6:47:18:d3:e6:02:24:43:3b:1c:4c:5f:96"
       - ansible-playbook/install:
           version: 2.10.7
       - run: 
