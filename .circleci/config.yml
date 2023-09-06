@@ -62,11 +62,11 @@ jobs:
       VAULT-PASSWORD: echo VAULT-PASSWORD=$ANSIBLE_VAULT >> $BASH_ENV
     steps: 
       - checkout
-      - attach_workspace:
-          at: /workspace
       - run:
           name: set inventory file
-          command: sed -i "1i ansible_dev_target ansible_host=${EC2_IP_ADDRESS} ansible_connection=ssh ansible_user=ec2-user" ansible/inventory
+          command: |
+            source $BASH_ENV
+            sed -i "1i ansible_dev_target ansible_host=${EC2_IP_ADDRESS} ansible_connection=ssh ansible_user=ec2-user" ansible/inventory
       - ansible-playbook/install:
           version: 2.10.7
       - run: 
