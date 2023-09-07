@@ -89,24 +89,26 @@ jobs:
           private-key: <<parameters.private-key>>
           playbook-options: '-u ec2-user -i ansible/inventory --vault-password-file=vault-password.txt'
 
-#  execute-serverspec:
-#    docker:
-#      - image: circleci/ruby:latest
-#    steps:
-#      - checkout
-#      - add_ssh_keys: 
-#          fingerprints:
-#            - "8a:34:6b:e6:47:18:d3:e6:02:24:43:3b:1c:4c:5f:96"
-#      - run:
-#          name: test rails_app
-#          command: |
-#            gem install bundler
-#            gem install serverspec 
-#            gem install rake
-#            gem install ed25519 -v '1.2'
-#            gem install bcrypt_pbkdf -v '1.0'
-#            cd serverspec
-#            rake spec
+  execute-serverspec:
+    docker:
+      - image: circleci/ruby:latest
+    steps:
+     - checkout
+     - add_ssh_keys: 
+        fingerprints:
+          - "8a:34:6b:e6:47:18:d3:e6:02:24:43:3b:1c:4c:5f:96"
+     - run:
+        name: test rails_app
+        command: |
+          echo "[HOST ec2]" >> ~/.ssh/config
+          echo "HostName $IP_ADDRESS" >> ~/.ssh/config
+          gem install bundler
+          gem install serverspec 
+          gem install rake
+          gem install ed25519 -v '1.2'
+          gem install bcrypt_pbkdf -v '1.0'
+          cd serverspec
+          rake spec
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
@@ -116,15 +118,16 @@ workflows:
       - execute-cloudformation
 #      - execute-variables:
 #          requires:
+#            requires:
 #            - execute-cloudformation
-      - execute-ansible:
-          requires:
-            - execute-cloudformation
+#      - execute-ansible:
+#          requires:
+#            - execute-cloudformation
 #           - execute-variables
 #          inventory: ANSIBLE_INVENTORY
-          playbook: ansible/playbook.yml
-          private-key: ANSIBLE_SSH_KEY
- #     - execute-serverspec:
- #         requires:
- #           - execute-cloudformation
- #           - execute-ansible
+#          playbook: ansible/playbook.yml
+#          private-key: ANSIBLE_SSH_KEY
+      - execute-serverspec:
+          requires:
+            - execute-cloudformation
+#            - execute-ansible
