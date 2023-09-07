@@ -128,10 +128,6 @@ workflows:
   RaiseTech-CircleCI:
     jobs:
       - execute-cloudformation
-#      - execute-variables:
-#          requires:
-#            requires:
-#            - execute-cloudformation
       - execute-ansible:
           requires:
             - execute-cloudformation
