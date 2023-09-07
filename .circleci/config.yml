@@ -107,10 +107,7 @@ jobs:
         command: |
           touch ~/.ssh/config
           echo "HOST ec2" >> ~/.ssh/config
-          sed -i "1a \  HostName\ ${EC2_IP_ADDRESS}\n\  User\ ec2-user\n\" ~/.ssh/config
-          echo "IdentityFile ~/.ssh/raisetech04.pem" >> ~/.ssh/config
-          echo "$SERVERSPEC_SSH_KEY" > ~/.ssh/raisetech04.pem
-          chmod 600 ~/.ssh/raisetech04.pem
+          ed -i "1a \  HostName\ ${EC2_PUBLIC_IP_ADDRESS}\n\  User\ ec2-user\n\  IdentityFile\ $\{KEY_FINGERPRINT\}" ~/.ssh/config
           gem install bundler
           gem install serverspec 
           gem install rake
