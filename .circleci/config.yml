@@ -72,11 +72,12 @@ jobs:
             IP_ADDRESS=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
             echo "[target_node]" >> ansible/inventory
             echo "$IP_ADDRESS" >> ansible/inventory
+            echo "export EC2_IP_ADDRESS=$IP_ADDRESS" > my_env.sh
       #sed -i "1i\ ansible_dev_target ansible_host=${IP_ADDRESS} ansible_connection=ssh ansible_user=ec2-user" ansible/inventory
-      #echo "export EC2_IP_ADDRESS=$IP_ADDRESS" >> $BASH_ENV
-      - add_ssh_keys:
-          fingerprints:
-            - "8a:34:6b:e6:47:18:d3:e6:02:24:43:3b:1c:4c:5f:96"
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - my_env.sh      
       - ansible-playbook/install:
           version: 2.10.7
       - run: 
@@ -94,14 +95,14 @@ jobs:
       - image: circleci/ruby:latest
     steps:
      - checkout
-     - add_ssh_keys: 
-        fingerprints:
-          - "8a:34:6b:e6:47:18:d3:e6:02:24:43:3b:1c:4c:5f:96"
+     - attach_workspace:
+            at: ./
      - run:
         name: test rails_app
         command: |
           echo "HOST ec2" >> ~/.ssh/config
-          echo "HostName $IP_ADDRESS" >> ~/.ssh/config
+          echo "User ec2-user" >> ~/.ssh/config
+          source my_env.sh && echo "HostName $EC2_IP_ADDRESS" >> ~/.ssh/config
           echo  "$ANSIBLE_SSH_KEY | base64 -d" > raisetech04.pem
           mv raisetech04.pem ~/.ssh/
           echo "IdentityFile ~/.ssh/raisetech04.pem" >> ~/.ssh/config
