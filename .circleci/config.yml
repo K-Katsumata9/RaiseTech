@@ -110,7 +110,7 @@ jobs:
         command: |
           touch ~/.ssh/config
           echo "HOST ec2" >> ~/.ssh/config
-          sed -i "1a \  HostName\ ${EC2_IP_ADDRESS}\n\  User\ ec2-user\n\  Port\ 22\n\ IdentityFile\ ~/.ssh/raisetech04.pem\}" ~/.ssh/config
+          sed -i "1a \  HostName\ ${EC2_IP_ADDRESS}\n\  User\ ec2-user\n\  Port\ 22\n\ IdentityFile\ ~/.ssh/raisetech04.pem}" ~/.ssh/config
           echo $SERVERSPEC_SSH_KEY > raisetech04.pem
           mv raisetech04.pem ~/.ssh/
           gem install bundler
