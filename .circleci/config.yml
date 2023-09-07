@@ -107,12 +107,7 @@ jobs:
         command: |
           touch ~/.ssh/config
           echo "HOST ec2" >> ~/.ssh/config
-          echo "User ec2-user" >> ~/.ssh/config
-          echo "HostName $EC2_IP_ADDRESS" >> ~/.ssh/config
-          echo  "$ANSIBLE_SSH_KEY | base64 -d" > raisetech04.pem
-          mv raisetech04.pem ~/.ssh/
-          chmod 600 ~/.ssh/raisetech04.pem
-          echo "IdentityFile ~/.ssh/raisetech04.pem" >> ~/.ssh/config
+          sed -i "1a \  HostName\ ${EC2_IP_ADDRESS}\n\  User\ ec2-user\n\  IdentityFile \$\{KEY_FINGERPRINT\}" ~/.ssh/config
           gem install bundler
           gem install serverspec 
           gem install rake
@@ -120,6 +115,12 @@ jobs:
           gem install bcrypt_pbkdf -v '1.0'
           cd serverspec
           rake spec
+#          echo "User ec2-user" >> ~/.ssh/config
+#          echo "HostName $EC2_IP_ADDRESS" >> ~/.ssh/config
+#          echo  "$ANSIBLE_SSH_KEY | base64 -d" > raisetech04.pem
+#          mv raisetech04.pem ~/.ssh/
+#          chmod 600 ~/.ssh/raisetech04.pem
+#          echo "IdentityFile ~/.ssh/raisetech04.pem" >> ~/.ssh/config
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
