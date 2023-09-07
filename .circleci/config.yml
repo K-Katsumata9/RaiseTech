@@ -101,7 +101,7 @@ jobs:
         name: test rails_app
         command: |
           echo "HOST ec2" >> ~/.ssh/config
-          echo "HostName $IP_ADDRESS" >> ~/.ssh/config
+          echo "HostName 18.183.17.55" >> ~/.ssh/config
           gem install bundler
           gem install serverspec 
           gem install rake
