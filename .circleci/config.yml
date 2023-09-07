@@ -109,8 +109,7 @@ jobs:
           echo "HOST ec2" >> ~/.ssh/config
           sed -i "1a \  HostName\ ${EC2_IP_ADDRESS}\n\  User\ ec2-user\n\" ~/.ssh/config
           echo "IdentityFile ~/.ssh/raisetech04.pem" >> ~/.ssh/config
-          echo "$SERVERSPEC_SSH_KEY" > raisetech04.pem
-          mv raisetech04.pem ~/.ssh/
+          echo "$SERVERSPEC_SSH_KEY" > ~/.ssh/raisetech04.pem
           chmod 600 ~/.ssh/raisetech04.pem
           gem install bundler
           gem install serverspec 
