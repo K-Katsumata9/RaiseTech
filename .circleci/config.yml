@@ -121,7 +121,7 @@ jobs:
         name: execute serverspec
         command: |
           cd serverspec
-          rake spec
+          rake spec -vvv
 #          echo "User ec2-user" >> ~/.ssh/config
 #          echo "HostName $EC2_IP_ADDRESS" >> ~/.ssh/config
 #          echo  "$ANSIBLE_SSH_KEY | base64 -d" > raisetech04.pem
