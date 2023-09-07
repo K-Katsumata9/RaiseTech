@@ -108,7 +108,7 @@ jobs:
           touch ~/.ssh/config
           echo "HOST ec2" >> ~/.ssh/config
           sed -i "1a \  HostName\ ${EC2_IP_ADDRESS}\n\  User\ ec2-user\n\" ~/.ssh/config
-          echo  "$ANSIBLE_SSH_KEY | base64 -d" > raisetech04.pem
+          echo  "$SERVERSPEC_SSH_KEY" > raisetech04.pem
           mv raisetech04.pem ~/.ssh/
           chmod 600 ~/.ssh/raisetech04.pem
           echo "IdentityFile ~/.ssh/raisetech04.pem" >> ~/.ssh/config
