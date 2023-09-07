@@ -100,9 +100,9 @@ jobs:
      - run:
         name: test rails_app
         command: |
-          echo "HOST ec2" > ~/.ssh/config
+          echo "HOST ec2" >> ~/.ssh/config
           echo "User ec2-user" >> ~/.ssh/config
-          source my_env.sh && echo "HostName 18.183.17.55" >> ~/.ssh/config
+          echo "HostName 18.183.17.55" >> ~/.ssh/config
           echo  "$ANSIBLE_SSH_KEY | base64 -d" > raisetech04.pem
           mv raisetech04.pem ~/.ssh/
           echo "IdentityFile ~/.ssh/raisetech04.pem" >> ~/.ssh/config
@@ -124,9 +124,9 @@ workflows:
 #          requires:
 #            requires:
 #            - execute-cloudformation
-#      - execute-ansible:
-#          requires:
-#            - execute-cloudformation
+      - execute-ansible:
+          requires:
+            - execute-cloudformation
 #           - execute-variables
 #          inventory: ANSIBLE_INVENTORY
 #          playbook: ansible/playbook.yml
@@ -134,4 +134,4 @@ workflows:
       - execute-serverspec:
           requires:
             - execute-cloudformation
-#            - execute-ansible
+            - execute-ansible
