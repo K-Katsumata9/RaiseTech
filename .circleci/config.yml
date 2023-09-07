@@ -129,8 +129,8 @@ workflows:
             - execute-cloudformation
 #           - execute-variables
 #          inventory: ANSIBLE_INVENTORY
-#          playbook: ansible/playbook.yml
-#          private-key: ANSIBLE_SSH_KEY
+          playbook: ansible/playbook.yml
+          private-key: ANSIBLE_SSH_KEY
       - execute-serverspec:
           requires:
             - execute-cloudformation
