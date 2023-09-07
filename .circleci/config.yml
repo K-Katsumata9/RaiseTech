@@ -107,7 +107,11 @@ jobs:
         command: |
           touch ~/.ssh/config
           echo "HOST ec2" >> ~/.ssh/config
-          sed -i "1a \  HostName\ ${EC2_IP_ADDRESS}\n\  User\ ec2-user\n\  IdentityFile\ $\{KEY_FINGERPRINT\}" ~/.ssh/config
+          sed -i "1a \  HostName\ ${EC2_IP_ADDRESS}\n\  User\ ec2-user\n\" ~/.ssh/config
+          echo  "$ANSIBLE_SSH_KEY | base64 -d" > raisetech04.pem
+          mv raisetech04.pem ~/.ssh/
+          chmod 600 ~/.ssh/raisetech04.pem
+          echo "IdentityFile ~/.ssh/raisetech04.pem" >> ~/.ssh/config
           gem install bundler
           gem install serverspec 
           gem install rake
@@ -121,7 +125,7 @@ jobs:
 #          mv raisetech04.pem ~/.ssh/
 #          chmod 600 ~/.ssh/raisetech04.pem
 #          echo "IdentityFile ~/.ssh/raisetech04.pem" >> ~/.ssh/config
-
+# IdentityFile\ $\{KEY_FINGERPRINT\}
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
 workflows:
