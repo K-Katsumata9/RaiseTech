@@ -115,7 +115,7 @@ jobs:
           echo "IdentityFile ~/.ssh/raisetech04.pem" >> ~/.ssh/config
           echo $SERVERSPEC_SSH_KEY > raisetech04.pem
           mv raisetech04.pem ~/.ssh/
-          chmod 640 ~/.ssh/raisetech04.pem
+          chmod 777 ~/.ssh/raisetech04.pem
      - run: 
         name: install serverspec
         command: gem install serverspec
