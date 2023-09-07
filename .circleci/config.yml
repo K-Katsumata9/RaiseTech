@@ -98,6 +98,9 @@ jobs:
       - image: circleci/ruby:latest
     steps:
      - checkout
+     - add_ssh_keys:
+        fingerprints:
+          - "a8:4a:8c:12:da:47:4a:2f:30:7c:1d:2a:0e:24:0f:67"
      - attach_workspace:
           at: .
      - run: |
