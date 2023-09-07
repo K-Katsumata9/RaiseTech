@@ -100,7 +100,7 @@ jobs:
      - run:
         name: test rails_app
         command: |
-          echo "HOST ec2" >> ~/.ssh/config
+          echo "HOST 18.183.17.55" >> ~/.ssh/config
           echo "User ec2-user" >> ~/.ssh/config
           echo "HostName 18.183.17.55" >> ~/.ssh/config
           echo  "$ANSIBLE_SSH_KEY | base64 -d" > raisetech04.pem
