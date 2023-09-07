@@ -102,7 +102,7 @@ jobs:
         command: |
           echo "HOST ec2" >> ~/.ssh/config
           echo "HostName $IP_ADDRESS" >> ~/.ssh/config
-          echo echo "$ANSIBLE_SSH_KEY" | base64 -d > raisetech04.pem
+          echo  "$ANSIBLE_SSH_KEY | base64 -d" > raisetech04.pem
           mv raisetech04.pem ~/.ssh/
           echo "IdentityFile ~/.ssh/raisetech04.pem" >> ~/.ssh/config
           gem install bundler
