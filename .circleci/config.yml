@@ -110,7 +110,8 @@ jobs:
           echo "User ec2-user" >> ~/.ssh/config
           echo "HostName $EC2_IP_ADDRESS" >> ~/.ssh/config
           echo  "$ANSIBLE_SSH_KEY | base64 -d" > raisetech04.pem
-          mv raisetech04.pem ~/.ssh/
+          mv raisetech04.pem ~/.ssh/raisetech04.pem
+          chmod 600 ~/.ssh/config
           echo "IdentityFile ~/.ssh/raisetech04.pem" >> ~/.ssh/config
           gem install bundler
           gem install serverspec 
