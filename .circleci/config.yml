@@ -82,6 +82,10 @@ jobs:
           version: '2.6.10'
       - ruby/install-deps:
           app-dir: serverspec
+      - attach_workspace:
+          at: .
+      - run: |
+          cat bash.env >> $BASH_ENV
       - run:
           name: setup target_host
           command: |
