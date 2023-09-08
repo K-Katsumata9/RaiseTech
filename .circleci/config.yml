@@ -75,21 +75,35 @@ jobs:
           private-key: <<parameters.private-key>>
           playbook-options: '-u ec2-user -i ansible/inventory --vault-password-file=vault-password.txt'
   execute-serverspec:
-    executor: ruby/default
-    steps: 
-      - checkout
-      - add_ssh_keys:
-          fingerprints:
-            - "8a:34:6b:e6:47:18:d3:e6:02:24:43:3b:1c:4c:5f:96"
-      - ruby/install:
-          version: '2.6.10'
-      - ruby/install-deps:
-          app-dir: serverspec
-      - run:
-          name: execute-serverspec
-          command: |
-            cd serverspec
-            bundle exec rspec
+    docker:
+      - image: cimg/ruby:3.2.2
+    steps:
+     - checkout
+     - add_ssh_keys:
+        fingerprints:
+          - "a8:4a:8c:12:da:47:4a:2f:30:7c:1d:2a:0e:24:0f:67"
+     - attach_workspace:
+          at: .
+     - run: |
+          cat bash.env >> $BASH_ENV
+     - run:
+        name: create config file
+        command: |
+          touch ~/.ssh/config
+          echo 'Host ec2' > ~/.ssh/config
+          sed -i "1a \  HostName\ ${EC2_IP_ADDRESS}\n\  User\ ec2-user\n\  IdentityFile\ ~/.ssh/id_rsa" ~/.ssh/config
+     - run: 
+        name: install serverspec
+        command: |
+          gem install ed25519 -v '1.2'
+          gem install bcrypt_pbkdf -v '1.0'
+          gem install serverspec
+          gem install rake
+     - run:
+        name: execute serverspec
+        command: |
+          cd serverspec
+          rake spec
 
 workflows:
   RaiseTech-CircleCI:

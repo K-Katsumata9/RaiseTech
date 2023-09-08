@@ -4,7 +4,7 @@ Resources:
   myEC2Instance:
     Type: AWS::EC2::Instance
     Properties:
-      KeyName: raisetech04 
+      KeyName: raisetech13 
       ImageId: ami-044dbe71ee2d3c59e
       InstanceType: t3.medium
       Monitoring: false
