@@ -82,6 +82,11 @@ jobs:
           version: '2.6.10'
       - ruby/install-deps:
           app-dir: serverspec
+      - setup target:
+          command: |
+            echo 'Host ec2' > ~/.ssh/config
+            sed -i "1a \  HostName\ ${EC2_IP_ADDRESS}\n\  User\ ec2-user\n\  IdentityFile\ ~/.ssh/id_rsa" ~/.ssh/config
+
       - run:
           name: execute-serverspec
           command: |
