@@ -78,6 +78,9 @@ jobs:
     executor: ruby/default
     steps: 
       - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "8a:34:6b:e6:47:18:d3:e6:02:24:43:3b:1c:4c:5f:96"
       - ruby/install:
           version: '2.6.10'
       - ruby/install-deps:
