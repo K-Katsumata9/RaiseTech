@@ -113,7 +113,11 @@ jobs:
           sed -i "1a \  HostName\ ${EC2_IP_ADDRESS}\n\  User\ ec2-user\n\  IdentityFile\ ~/.ssh/id_rsa" ~/.ssh/config
      - run: 
         name: install serverspec
-        command: gem install serverspec
+        command: |
+          gem install serverspec
+          gem install rake
+          gem install ed25519 -v '1.2'
+          gem install bcrypt_pbkdf -v '1.0'
      - run:
         name: execute serverspec
         command: |
