@@ -1,0 +1,39 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+# RDSのサブネット登録
+  myRDSSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: raisetech13
+      DBSubnetGroupName: l13privatesubnet1c
+      SubnetIds:
+        - !ImportValue l13privatesubnet1c
+        - !ImportValue l13privatesubnet1a
+      Tags:
+        - Key: Name
+          Value: raisetech13
+# RDSの作成
+  myRDSInstance:
+    Type: AWS::RDS::DBInstance
+    Properties: 
+      AvailabilityZone: !Sub ${AWS::Region}c
+      Engine: mysql
+      EngineVersion: 8.0.33
+      MultiAZ: false
+      DBName: raisetech13
+      DBInstanceIdentifier: raisetech13
+      Endpoint:
+        Port: 3306
+        Address: '{{resolve:ssm:raisetech13-rds-ep:1}}'
+      MasterUsername: '{{resolve:ssm:raisetech13-rds-user:1}}'
+      MasterUserPassword: '{{resolve:ssm-secure:raisetech13-rds-pw:1}}'
+      DBInstanceClass: db.t3.micro
+      StorageType: gp2
+      AllocatedStorage: 20
+      DBSubnetGroupName: !Ref myRDSSubnetGroup
+      PubliclyAccessible: "false"
+      VPCSecurityGroups: 
+        - !ImportValue l13sg2
+      Tags:
+        - Key: Name
+          Value: raisetech13
