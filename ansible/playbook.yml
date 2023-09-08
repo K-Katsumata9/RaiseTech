@@ -4,9 +4,9 @@
   hosts: target_node
   # gather_facts: true
   roles:
-#    - mysql
-#    - ruby
-#    - webpack
+    - mysql
+    - ruby
+    - webpack
     - nginx
-#    - git_clone
-#    - rails_app_start
+    - git_clone
+    - rails_app_start
