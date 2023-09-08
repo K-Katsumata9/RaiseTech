@@ -110,7 +110,7 @@ jobs:
         command: |
           touch ~/.ssh/config
           echo 'Host ec2' > ~/.ssh/config
-          sed -i "1a \  HostName\ ${EC2_IP_ADDRESS}\n\  User\ ec2-user\n\  IdentityFile\ "SHA256:a8:4a:8c:12:da:47:4a:2f:30:7c:1d:2a:0e:24:0f:67"" ~/.ssh/config
+          sed -i "1a \  HostName\ ${EC2_IP_ADDRESS}\n\  User\ ec2-user\n\  IdentityFile\ ~/.ssh/id_rsa" ~/.ssh/config
      - run: 
         name: install serverspec
         command: gem install serverspec
