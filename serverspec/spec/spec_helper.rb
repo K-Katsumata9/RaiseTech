@@ -16,7 +16,7 @@ end
 
 host = ENV['TARGET_HOST']
 
-options = Net::SSH::Config.for(ec2-user)
+options = Net::SSH::Config.for(ec2)
 options[:keys] = ['~/.ssh/raisetech04.pem']
 options[:user] ||= Etc.getlogin
 
