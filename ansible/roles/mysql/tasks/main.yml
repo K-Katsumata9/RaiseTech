@@ -1,0 +1,58 @@
+    - name: remove the MariaDB
+      become: true
+      yum:
+        name: mariadb-*
+        state: absent
+
+    - name: Check if mysql-community file exists
+      become: true
+      stat: 
+        path: /etc/yum.repos.d/mysql-community.repo
+      register: mysql_community_repo
+
+#    - name: install the mysql rpm from a remote repo
+#      become: true
+#      shell: sudo yum localinstall https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm
+#      when: not mysql_community_repo.stat.exists
+#      changed_when: false
+    
+#    - name: install the mysql rpm from a remote repo
+#      become: true
+#      package: 
+#        name: https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm
+#        state: present
+#      when: not mysql_community_repo.stat.exists
+#      changed_when: false
+
+    - name: Download the mysql rpm from a remote repo
+      become: true
+      command: sudo yum localinstall -y https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm
+      when: not mysql_community_repo.stat.exists 
+      changed_when: false
+
+    - name: install mysql-community-devel
+      become: true
+      yum:
+        name: mysql-community-devel
+        state: latest
+
+    - name: install mysql-community-server
+      become: true
+      yum: 
+        name: mysql-community-server
+        state: latest
+
+    - name: make mysql logfile
+      become: true
+      template: 
+        src: ../templates/mysqld.log.j2
+        dest: /var/log/mysqld.log
+        owner: ec2-user
+        group: ec2-user
+        mode: '0774'
+
+    - name: start mysql by default
+      become: true
+      service:
+        name: mysqld
+        enabled: true
