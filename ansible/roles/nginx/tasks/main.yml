@@ -9,11 +9,3 @@
     command:  sudo amazon-linux-extras install -y nginx1
     when: not nginx_repo.stat.exists 
     changed_when: false
-
-
-#  - name: Settings Nginx
-#    become: true
-#    copy:
-#      src: roles/nginx/templates/nginx.conf
-#      dest: /etc/nginx/nginx.conf
-

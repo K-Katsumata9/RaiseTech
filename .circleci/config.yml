@@ -56,7 +56,6 @@ jobs:
             echo "$IP_ADDRESS" >> ansible/inventory
             echo "export EC2_IP_ADDRESS=$IP_ADDRESS" >> $BASH_ENV
             source $BASH_ENV
-      #sed -i "1i\ ansible_dev_target ansible_host=${IP_ADDRESS} ansible_connection=ssh ansible_user=ec2-user" ansible/inventory
       - run: |
           cp $BASH_ENV bash.env
       - persist_to_workspace:
@@ -70,7 +69,6 @@ jobs:
           command: |
             echo $ANSIBLE_VAULT > vault-password.txt
       - ansible-playbook/playbook:
-#          inventory: ansibe/inventory
           playbook: <<parameters.playbook>>
           private-key: <<parameters.private-key>>
           playbook-options: '-u ec2-user -i ansible/inventory --vault-password-file=vault-password.txt'
@@ -112,8 +110,6 @@ workflows:
       - execute-ansible:
           requires:
             - execute-cloudformation
-#           - execute-variables
-#          inventory: ANSIBLE_INVENTORY
           playbook: ansible/playbook.yml
           private-key: ANSIBLE_SSH_KEY
       - execute-serverspec:

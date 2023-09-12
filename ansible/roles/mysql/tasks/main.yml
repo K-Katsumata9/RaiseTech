@@ -10,20 +10,6 @@
         path: /etc/yum.repos.d/mysql-community.repo
       register: mysql_community_repo
 
-#    - name: install the mysql rpm from a remote repo
-#      become: true
-#      shell: sudo yum localinstall https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm
-#      when: not mysql_community_repo.stat.exists
-#      changed_when: false
-    
-#    - name: install the mysql rpm from a remote repo
-#      become: true
-#      package: 
-#        name: https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm
-#        state: present
-#      when: not mysql_community_repo.stat.exists
-#      changed_when: false
-
     - name: Download the mysql rpm from a remote repo
       become: true
       command: sudo yum localinstall -y https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm

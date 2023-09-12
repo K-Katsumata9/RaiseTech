@@ -1,8 +1,4 @@
 ---
-#  - name: bundle install
-#    command: |
-#     cd /home/ec2-user/raisetech-live8-sample-app
-#     bundle install
       
   - name: Change directory and bundle install
     command:
@@ -43,11 +39,6 @@
     command: 
       chdir: /home/ec2-user/raisetech-live8-sample-app/
       cmd: bash -lc "rails db:migrate"
-  
-#  - name: Start Unicorn
-#    command: |
-#      cd ~/home/ec2-user/raisetech-live8-sample-app/
-#      bundle exec unicorn_rails -c config/unicorn.rb -D
   
   - name: Start unicorn
     command:
