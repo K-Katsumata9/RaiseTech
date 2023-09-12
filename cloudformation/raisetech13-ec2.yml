@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+#EC2の作成
+  myEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: raisetech13 
+      ImageId: ami-044dbe71ee2d3c59e
+      InstanceType: t3.medium
+      Monitoring: false
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          SubnetId: !ImportValue l13publicsubnet1c
+          GroupSet:
+           - !ImportValue l13sg1
+      UserData: !Base64 |  
+        #! /bin/bash
+        sudo yum -y update 
+      Tags:
+        - Key: Name
+          Value: raisetech13
+Outputs:
+# EC2
+  l13EC2:
+    Value: !Ref myEC2Instance
+    Export:
+      Name: l13-ec2

@@ -1,0 +1,50 @@
+---
+      
+  - name: Change directory and bundle install
+    command:
+      cmd: bash -lc "bundle install"
+      chdir: /home/ec2-user/raisetech-live8-sample-app
+
+  - name: Setup Database
+    copy:
+      src: roles/rails_app_start/templates/database.yml
+      dest: /home/ec2-user/raisetech-live8-sample-app/config/database.yml
+
+  - name: Setup Procfile
+    copy:
+      src: roles/rails_app_start/templates/Procfile.dev
+      dest: /home/ec2-user/raisetech-live8-sample-app/Procfile.dev
+
+  - name: Setup unicorn.rb
+    copy:
+      src: roles/rails_app_start/templates/unicorn.rb
+      dest: /home/ec2-user/raisetech-live8-sample-app/config/unicorn.rb
+
+  - name: assets precompile
+    command: 
+      cmd: bash -lc "rails assets:precompile"
+      chdir: /home/ec2-user/raisetech-live8-sample-app/
+
+  - name: aws cli install
+    yum: 
+      name: aws-cli
+      state: latest
+      
+  - name: database create
+    command: 
+      chdir: /home/ec2-user/raisetech-live8-sample-app/
+      cmd: bash -lc "rails db:create"
+
+  - name: database migrate
+    command: 
+      chdir: /home/ec2-user/raisetech-live8-sample-app/
+      cmd: bash -lc "rails db:migrate"
+  
+  - name: Start unicorn
+    command:
+      cmd: bash -lc "bundle exec unicorn_rails -c /home/ec2-user/raisetech-live8-sample-app/config/unicorn.rb -D"
+      chdir: /home/ec2-user/raisetech-live8-sample-app/
+
+  - name: Start Nginx 
+    become: true
+    command: sudo systemctl start nginx

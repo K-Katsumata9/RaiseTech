@@ -1,0 +1,12 @@
+---
+  - name: web_app exists
+    stat: 
+      path: /home/ec2-user/raisetech-live8-sample-app
+    register: web_app
+
+  - name: clone_repositories
+    git:
+      repo: https://github.com/yuta-ushijima/raisetech-live8-sample-app.git
+      dest: /home/ec2-user/raisetech-live8-sample-app
+    when: not web_app.stat.exists 
+    changed_when: false 

@@ -1,0 +1,118 @@
+version: 2.1
+orbs:
+  aws-cli: circleci/aws-cli@3.1.5
+  ansible-playbook: orbss/ansible-playbook@0.0.5
+  ruby: circleci/ruby@2.1.0
+jobs:
+  execute-cloudformation:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - aws-cli/setup:
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-region: AWS_DEFAULT_REGION
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+      - run: 
+          name: deploy CloudFormation & set environment variables
+          command: |
+            aws cloudformation deploy --template-file cloudformation/raisetech13-vpc.yml --stack-name raisetech13-vpc
+            aws cloudformation deploy --template-file cloudformation/raisetech13-ec2.yml --stack-name raisetech13-ec2
+            aws cloudformation deploy --template-file cloudformation/raisetech13-rds.yml --stack-name raisetech13-rds
+  execute-ansible: 
+    executor: ansible-playbook/default
+    parameters:
+      inventory:
+        default: NONEXISTENT_ANSIBLE_INVENTORY
+        description: |
+          Ansible inventory file. The default value must be empty,
+          so do not store any value to this environment variable.
+          The data must be registered in base64 format
+        type: env_var_name
+      playbook:
+        description: |
+          The path of Ansible playbook
+        type: string
+      private-key:
+        default: NONEXISTENT_ANSIBLE_SSH_KEY
+        description: |
+          SSH private key file. The default value must be empty,
+          so do not store any value to this environment variable.
+          The data must be registered in base64 format
+        type: env_var_name
+    environment:
+      VAULT-PASSWORD: echo VAULT-PASSWORD=$ANSIBLE_VAULT >> $BASH_ENV
+    steps: 
+      - checkout
+      - run:
+          name: set inventory file
+          command: |
+            sudo pip install awscli
+            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+            aws configure set region $AWS_DEFAULT_REGION
+            INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=raisetech13" --query "Reservations[0].Instances[0].InstanceId" --output text)
+            IP_ADDRESS=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
+            echo "[target_node]" >> ansible/inventory
+            echo "$IP_ADDRESS" >> ansible/inventory
+            echo "export EC2_IP_ADDRESS=$IP_ADDRESS" >> $BASH_ENV
+            source $BASH_ENV
+      - run: |
+          cp $BASH_ENV bash.env
+      - persist_to_workspace:
+          root: .
+          paths:
+            - bash.env    
+      - ansible-playbook/install:
+          version: 2.10.7
+      - run: 
+          name: Get ansible-vault
+          command: |
+            echo $ANSIBLE_VAULT > vault-password.txt
+      - ansible-playbook/playbook:
+          playbook: <<parameters.playbook>>
+          private-key: <<parameters.private-key>>
+          playbook-options: '-u ec2-user -i ansible/inventory --vault-password-file=vault-password.txt'
+  execute-serverspec:
+    docker:
+      - image: cimg/ruby:3.2.2
+    steps:
+     - checkout
+     - add_ssh_keys:
+        fingerprints:
+          - "38:20:83:07:6d:c4:96:08:e6:3c:bf:24:02:ad:08:da"
+     - attach_workspace:
+          at: .
+     - run: |
+          cat bash.env >> $BASH_ENV
+     - run:
+        name: create config file
+        command: |
+          touch ~/.ssh/config
+          echo 'Host ec2' > ~/.ssh/config
+          sed -i "1a \  HostName\ ${EC2_IP_ADDRESS}\n\  User\ ec2-user\n\  IdentityFile\ ~/.ssh/id_rsa" ~/.ssh/config
+     - run: 
+        name: install serverspec
+        command: |
+          gem install ed25519 -v '1.2'
+          gem install bcrypt_pbkdf -v '1.0'
+          gem install serverspec
+          gem install rake
+     - run:
+        name: execute serverspec
+        command: |
+          cd serverspec
+          rake spec
+          
+workflows:
+  RaiseTech-CircleCI:
+    jobs:
+      - execute-cloudformation
+      - execute-ansible:
+          requires:
+            - execute-cloudformation
+          playbook: ansible/playbook.yml
+          private-key: ANSIBLE_SSH_KEY
+      - execute-serverspec:
+          requires:
+            - execute-cloudformation
+            - execute-ansible
