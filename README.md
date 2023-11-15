@@ -13,3 +13,4 @@
 |  [lecture13](lecture13/lecture13.md)  |  CircleCIで、Cloudformation → Ansible → ServerSpecをノンストップで稼働するように実装  |
 ### Lecture13構成図
 ![lecture15](/diagram.png)
+
