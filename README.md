@@ -12,4 +12,5 @@
 |  [lecture12](lecture12/lecture12.md)  |  GitHubのリポジトリにCircleCIを組み込み、ジョブ(Cfn-lint)が成功することを確認。  |
 |  [lecture13](lecture13/lecture13.md)  |  CircleCIで、Cloudformation → Ansible → ServerSpecをノンストップで稼働するように実装  |
 ### Lecture13構成図
-編集中
+![lecture15](/diagram.png)
+
